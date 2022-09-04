@@ -1,0 +1,65 @@
+---
+title: "ANA 515 Assignment 1"
+author: "Cesar Riano"
+date: '2022-09-04'
+output: 
+    html_document:
+        css: bootstrap.min.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document created for the 1st assignment of the ANA 515 Data Storage class.
+
+
+```{r, include = FALSE}
+#The include = FALSE function hides both the code and output in my output document
+
+#Packages needed: 
+library(tidyverse)
+library(knitr)
+library(bslib)
+```
+
+```{r, include = FALSE}
+#this next lines are getting the data from githubb
+url <- "https://raw.githubusercontent.com/fivethirtyeight/guns-data/master/full_data.csv"
+CR_data <- read_csv(url)
+glimpse(CR_data)
+```
+
+```{r, include = FALSE}
+#this next line is creating a subset called 'youth' 
+youth <- CR_data %>% 
+  filter(age <= 65)
+summary(youth)
+```
+## Analysis
+
+We have data about `r nrow(CR_data)` individuals killed by guns. Only 
+`r nrow(CR_data) - nrow(youth)` are older than 65. 
+The distribution of the remainder is shown below:
+
+## Gun deaths by age
+
+```{r youth-dist, echo = FALSE}
+youth %>%
+  ggplot(aes(age)) + 
+geom_freqpoly(binwidth = 1)
+```
+
+## Gun deaths by race
+```{r race-dist, echo = FALSE}
+youth %>%
+  ggplot(aes(fct_infreq(race)%>% fct_rev())) + 
+  geom_bar() + coord_flip() + 
+  labs(x = "Victim race")
+```
+
+## Side note
+
+This was very very usefull to keep track of my code. It works kind of like Jupyter notebooks on Python. Thanks for this Anna!
